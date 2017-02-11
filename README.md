@@ -7,3 +7,4 @@ Cryptographic Encryption Techniques using Java
 ## Techniques
 * Caesar Cipher
 * Substitution Technique
+* Diffie Helmann Key Exchange

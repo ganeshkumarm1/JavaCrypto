@@ -2,7 +2,7 @@
 * @Author: GaNeShKuMaRm
 * @Date:   2017-01-13 18:08:27
 * @Last Modified by:   GaNeShKuMaRm
-* @Last Modified time: 2017-01-13 19:25:29
+* @Last Modified time: 2017-02-11 18:59:55
 */
 import java.math.BigInteger;
 
@@ -26,10 +26,10 @@ public class HELPERS
         {
             return "000" + stringBIN;
         }
-        return stringBIN;   
+        return stringBIN;
     }
-    
-    
+
+
     public String asciiToHex(String string)
     {
         String stringHEX = "";
@@ -50,15 +50,15 @@ public class HELPERS
         }
         return stringBIN;
     }
-    
-    public String binaryToHex(String stringBIN)
+
+    /*public String binaryToHex(String stringBIN)
     {
         BigInteger decimal = new BigInteger(stringBIN, 2);
         BigInteger hex = new BigInteger(decimal, 10);
         //System.out.println(hexStr);
         return new String(hex.toByteArray());//hexStr;
     }
-    
+
     public String hexToAscii(String stringHEX)
     {
         String str = "";
@@ -67,7 +67,7 @@ public class HELPERS
             String s = stringHEX.substring(i, (i + 2));
             int decimal = Integer.parseInt(s, 16);
             str = str + (char) decimal;
-        }          
+        }
         return str;
-    }
+    }*/
 }

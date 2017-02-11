@@ -2,7 +2,7 @@
 * @Author: GaNeShKuMaRm
 * @Date:   2017-01-13 10:56:39
 * @Last Modified by:   GaNeShKuMaRm
-* @Last Modified time: 2017-01-13 19:29:34
+* @Last Modified time: 2017-02-11 19:02:13
 */
 
 import java.util.*;
@@ -20,7 +20,7 @@ public class DES
         }
         return messageBINFromIPINV;
     }
-    
+
     public static String applyP(String messageBINFromS, TABLES tables)
     {
         final int[] P_TABLE = tables.P_TABLE;
@@ -32,7 +32,7 @@ public class DES
         //System.out.println(messageBINFromP.length());
         return messageBINFromP;
     }
-    public static String applyS(String RnMinusOneFromETableXORKn, TABLES 
+    public static String applyS(String RnMinusOneFromETableXORKn, TABLES
     tables, HELPERS helpers)
     {
         final int[][][] S_TABLE = tables.S_TABLE;
@@ -55,9 +55,9 @@ public class DES
         //System.out.println(Sn.length());
         return Sn;
     }
-    
+
     public static String XOR(String RnMinusOneFromETable, String Kn)
-    {   
+    {
         String RnMinusOneFromETableXORKn = "";
         for(int index = 0; index < RnMinusOneFromETable.length(); index ++)
         {
@@ -72,10 +72,10 @@ public class DES
         }
         return RnMinusOneFromETableXORKn;
     }
-    
+
     public static String applyE(String RnMinusOne, TABLES tables)
     {
-        final int[] E_TABLE = tables.E_TABLE;    
+        final int[] E_TABLE = tables.E_TABLE;
         String RnMinusOneFromETable = "";
         for(int index = 0; index < E_TABLE.length; index ++)
         {
@@ -83,7 +83,7 @@ public class DES
         }
         return RnMinusOneFromETable;
     }
-    
+
     public static String applyIP(String messageBIN, TABLES tables)
     {
         final int[] IP_TABLE = tables.IP_TABLE;
@@ -94,7 +94,7 @@ public class DES
         }
         return messageBINFromIP;
     }
-    
+
     public static List<String> applyPC2(List<String> shiftedKeys, TABLES tables)
     {
         final int[] PC2_TABLE = tables.PC2_TABLE;
@@ -112,19 +112,19 @@ public class DES
         }
         return subKeys;
     }
-    
+
     public static List<String> applyPC1(String keyBIN, TABLES tables)
     {
-        int[] numberOfShifts = new int[] {1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1};    
+        int[] numberOfShifts = new int[] {1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1};
         final int[] PC1_TABLE = tables.PC1_TABLE;
         String keyBINFromPC1 = "";
-        
+
         for(int index = 0; index < PC1_TABLE.length; index ++)
         {
-            
+
             keyBINFromPC1 += keyBIN.charAt(PC1_TABLE[index] - 1);
         }
-        
+
         String C0 = keyBINFromPC1.substring(0, 28);
         String D0 = keyBINFromPC1.substring(28, 56);
         List<String> shiftedKeys = new ArrayList<String>();
@@ -138,7 +138,7 @@ public class DES
         }
         return shiftedKeys;
     }
-    
+
     public static List<String> splitMessagesIntoBlocks(String messageBIN)
     {
         List<String> messageblockList = new ArrayList<String>();
@@ -151,7 +151,7 @@ public class DES
         }
         return messageblockList;
     }
-    
+
     public static void main(String[] args)
     {
         TABLES tables = new TABLES();
@@ -163,39 +163,39 @@ public class DES
         String messageHEX = helpers.asciiToHex(message);
         String keyHEX = helpers.asciiToHex(key);
 
-        //System.out.println(messageHEX);
-        //System.out.println(keyHEX);
+        System.out.println(messageHEX);
+        System.out.println(keyHEX);
         String messageBIN = helpers.hexToBinary(messageHEX);
         String keyBIN = helpers.hexToBinary(keyHEX);
-        
+
         //System.out.println(messageBIN);
         //System.out.println(keyBIN);
-        
+
         while(keyBIN.length() % 64 != 0)
         {
             keyBIN += '0';
         }
-        
+
         while(messageBIN.length() % 64 != 0)
         {
             messageBIN += '0';
         }
-        
+
         //System.out.println(messageBIN);
         //System.out.println(keyBIN);
-        
+
         //List<String> keyBIN_64BitList = splitIntoBlocks(keyBIN);
         List<String> messageBIN_64BitList = splitMessagesIntoBlocks(messageBIN);
-        
+
         List<String> shiftedKeys = applyPC1(keyBIN, tables);
         List<String> subKeys = applyPC2(shiftedKeys, tables);
 
         String encryptedMessageBIN = "";
         String encryptedMessage = "";
-        //System.out.println(messageBIN.length());        
+        //System.out.println(messageBIN.length());
         //System.out.println(subKeys);
         for(int i = 0; i < messageBIN_64BitList.size(); i ++)
-        {   
+        {
             List<String> L = new ArrayList<String>();
             List<String> R = new ArrayList<String>();
             String messageBINBlock = messageBIN_64BitList.get(i);
@@ -213,22 +213,23 @@ public class DES
                 String messageBINFromS = applyS(RnMinusOneFromETableXORKn, tables, helpers);
                 String f = applyP(messageBINFromS, tables);
                 String Rn = XOR(LnMinusOne, f);
-                //System.out.println(Rn);         
+                //System.out.println(Rn);
                 R.add(Rn);
                 //System.out.println(RnMinusOneFromETable);
                 //System.out.println(RnMinusOneFromETable.length());
             }
             String RnLn = R.get(16) + L.get(16);
             //System.out.println(RnLn);
-            encryptedMessageBIN += applyIPINV(RnLn, tables); 
-            String encryptedMessageHex = helpers.binaryToHex(encryptedMessageBIN);
-            System.out.println(encryptedMessageHex);
+            encryptedMessageBIN += applyIPINV(RnLn, tables);
+            //String encryptedMessageHex = helpers.binaryToHex(encryptedMessageBIN);
+            //System.out.println(encryptedMessageHex);
             //encryptedMessage += helpers.hexToAscii(encryptedMessageHex);
-            
+
             //System.out.println(RnLn.length());
             //System.out.println(L);
             //System.out.println(R);
         }
+        System.out.println(encryptedMessageBIN);
         //System.out.println(encryptedMessage);
         //System.out.println(messageBINFromIP);
         //System.out.println(messageBINFromIP.length());
