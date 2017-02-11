@@ -2,7 +2,7 @@
 * @Author: GaNeShKuMaRm
 * @Date:   2017-02-11 21:18:19
 * @Last Modified by:   GaNeShKuMaRm
-* @Last Modified time: 2017-02-12 00:33:12
+* @Last Modified time: 2017-02-12 00:39:16
 */
 
 import java.io.*;
@@ -27,6 +27,7 @@ class Server
             request = inFromClient.readLine();
             System.out.println("Request from client " + client);
             client ++;
+
             m = DH.generateRandom(10L, 50L);
             p = DH.generateRandomPrime(1000L, 10000L);
             a = DH.findPrimitiveRoot(p);
@@ -43,12 +44,6 @@ class Server
 
             K1 = DH.calculateMod(Y, m, p);
             System.out.println("K1: " + K1);
-            //System.out.println(clientSentence);
-
-
-            //System.out.println("Received: " + clientSentence);
-            //capitalizedSentence = clientSentence.toUpperCase() + '\n';
-
          }
       }
 }
