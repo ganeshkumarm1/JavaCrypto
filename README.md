@@ -9,3 +9,4 @@ Cryptographic Encryption Techniques using Java
 * Substitution Technique
 * Diffie Helmann Key Exchange
 * RSA
+* MD5
