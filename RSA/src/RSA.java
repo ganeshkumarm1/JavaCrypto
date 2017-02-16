@@ -1,72 +1,65 @@
 /*
 * @Author: GaNeShKuMaRm
-* @Date:   2017-02-12 08:50:08
+* @Date:   2017-02-15 21:28:15
 * @Last Modified by:   GaNeShKuMaRm
-* @Last Modified time: 2017-02-12 09:11:16
+* @Last Modified time: 2017-02-15 22:39:48
 */
 
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.PublicKey;
-import java.security.PrivateKey;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
-import javax.crypto.Cipher;
+import java.math.*;
 import java.util.*;
 
 public class RSA
 {
-    private KeyPair keyPair;
-    public RSA() throws Exception
+    public static BigInteger generateE(BigInteger phi)
     {
-        Initialize();
-    }
-    public void Initialize() throws Exception
-    {
-        KeyPairGenerator keygen = KeyPairGenerator.getInstance("RSA");
-        keygen.initialize(512);
-        keyPair = keygen.generateKeyPair();
-    }
-    public String encrypt(String plaintext)  throws Exception
-    {
-        PublicKey key = keyPair.getPublic();
-        Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-        cipher.init(Cipher.ENCRYPT_MODE, key);
-        byte[] ciphertext = cipher.doFinal(plaintext.getBytes("UTF8"));
-        return encodeBASE64(ciphertext);
-    }
-    public String decrypt(String ciphertext)  throws Exception
-    {
-        PrivateKey key = keyPair.getPrivate();
-        Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-
-        cipher.init(Cipher.DECRYPT_MODE, key);
-        byte[] plaintext = cipher.doFinal(decodeBASE64(ciphertext));
-        return new String(plaintext, "UTF8");
-    }
-    private static String encodeBASE64(byte[] bytes)
-    {
-        BASE64Encoder b64 = new BASE64Encoder();
-        return b64.encode(bytes);
+        BigInteger begin = new BigInteger("3");
+        while(begin.compareTo(phi) < 0)
+        {
+            if(isCoPrime(begin, phi))
+                break;
+            begin = begin.add(BigInteger.ONE);
+            System.out.println(begin);
+        }
+        return begin;
     }
 
-    private static byte[] decodeBASE64(String text) throws Exception
+    public static BigInteger gcd(BigInteger n1, BigInteger n2)
     {
-        BASE64Decoder b64 = new BASE64Decoder();
-        return b64.decodeBuffer(text);
+       if(n1 == BigInteger.ZERO)
+			return n2;
+		return gcd(n2.mod(n1),n1);
     }
-    public static void main(String[] args) throws Exception
+
+    public static boolean isCoPrime(BigInteger n1, BigInteger n2)
     {
-        RSA rsa = new RSA();
+        if(gcd(n1,n2).equals(BigInteger.ONE))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public static void main(String[] args)
+    {
+        BigInteger p, q, n, phi, e, d, m, cipherText, decryptedMessage;
+	String plainText;
         Scanner sc = new Scanner(System.in);
-        System.out.println("Enter a line: ");
-        java.io.InputStreamReader sreader = new java.io.InputStreamReader(System.in);
-        java.io.BufferedReader breader = new java.io.BufferedReader(sreader);
-        String plaintext = sc.nextLine();
-        System.out.println("Plaintext = " + plaintext);
-        String ciphertext = rsa.encrypt(plaintext);
-        System.out.println("After Encryption Ciphertext = " + ciphertext);
-        System.out.println("After Decryption Plaintext = " + rsa.decrypt(ciphertext));
+        System.out.println("Enter p: ");
+        p = new BigInteger("32416189381");
+        //p = new BigInteger(sc.nextLine());
+        System.out.println("Enter q: ");
+        //q = new BigInteger(sc.nextLine());
+        q = new BigInteger("32416190071");
+        n = p.multiply(q);
+        phi = (p.subtract(BigInteger.ONE)).multiply((q.subtract(BigInteger.ONE)));
+        e = generateE(phi);
+        d = e.modInverse(phi);
+	    System.out.println("Plain Text: ");
+	    plainText = sc.nextLine();
+	    m = new BigInteger(plainText.getBytes());
+	    cipherText = m.modPow(e, n);
+	    System.out.println("Cipher Text: " + new String(cipherText.toByteArray()));
+	    decryptedMessage = cipherText.modPow(d, n);
+	    System.out.println("Decrypted Message: " + new String(decryptedMessage.toByteArray()));
     }
-
 }
