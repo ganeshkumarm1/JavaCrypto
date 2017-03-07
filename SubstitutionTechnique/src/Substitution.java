@@ -1,7 +1,7 @@
 import java.util.*;
 import java.io.*;
 
-class Substitution 
+class Substitution
 {
     // Encryption
     public static String encrypt(String line)
@@ -19,26 +19,26 @@ class Substitution
                 }
                 else
                 {
-                    temp += line.charAt(i);    
+                    temp += line.charAt(i);
                 }
-                
-            }    
+
+            }
             return temp;
         }
         catch(Exception e)
         {
             System.out.println(e);
         }
-        
+
         return temp;
     }
-    
+
     //Read from file
     public static String readTextFile()
     {
             String line = null;
             String cipher_text = "";
-            try 
+            try
             {
                 BufferedReader reader = new BufferedReader(new FileReader("../plain_text.txt"));
                 while((line = reader.readLine()) != null)
@@ -47,19 +47,19 @@ class Substitution
                 }
                 return cipher_text;
             }
-            catch(Exception e) 
+            catch(Exception e)
             {
                 System.out.println(e);
             }
             return cipher_text;
     }
-    
+
     //Write to File
     public static void writeTextFile(String cipher_text)
     {
         try
         {
-            BufferedWriter writer = new BufferedWriter(new FileWriter("../cipher_text.txt"));  
+            BufferedWriter writer = new BufferedWriter(new FileWriter("../cipher_text.txt"));
             System.out.println(cipher_text);
             writer.write(cipher_text);
             writer.flush();
@@ -70,7 +70,7 @@ class Substitution
             System.out.println(e);
         }
     }
-    public static void main(String args[]) 
+    public static void main(String args[])
     {
             String cipher_text = readTextFile();
             writeTextFile(cipher_text.trim());
