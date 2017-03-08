@@ -7,7 +7,7 @@ class Server
       {
          String key, request;
          String plainText = "", line = "";
-         ServerSocket welcomeSocket = new ServerSocket(6789);
+         ServerSocket welcomeSocket = new ServerSocket(6788);
          while(true)
          {
             Socket connectionSocket = welcomeSocket.accept();
@@ -16,7 +16,7 @@ class Server
                new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
             DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
             request = inFromClient.readLine();
-            plainText = new Scanner(new File("../plain_text.txt")).useDelimiter("\\Z").next();
+            plainText = new Scanner(new File("plain_text.txt")).useDelimiter("\\Z").next();
             System.out.println(plainText);
             System.out.print("Key: ");
             key = sc.nextLine();

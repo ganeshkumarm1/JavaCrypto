@@ -8,7 +8,7 @@ class Client
  {
   String request = "AES";
   String cipherText;
-  Socket clientSocket = new Socket("localhost", 6789);
+  Socket clientSocket = new Socket("localhost", 6788);
   DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
   BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
   outToServer.writeBytes(request + '\n');
