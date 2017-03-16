@@ -12,3 +12,4 @@ Cryptographic Encryption Techniques using Java
 * MD5
 * AES
 * ECC
+* Steganography
